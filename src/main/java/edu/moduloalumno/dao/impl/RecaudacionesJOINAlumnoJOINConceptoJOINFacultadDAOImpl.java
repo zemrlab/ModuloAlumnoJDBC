@@ -68,13 +68,15 @@ public class RecaudacionesJOINAlumnoJOINConceptoJOINFacultadDAOImpl implements I
 	@Override
 	public List<RecaudacionesJOINAlumnoJOINConceptoJOINFacultad> getRecaudacionesJOINAlumnoJOINConceptoJOINFacultadByNomApe(String nomApe) {		
 		String sql = "select r.id_rec, r.id_alum, ap.nom_alumno || ' ' || ap.ape_paterno || ' ' || ap.ape_materno as ape_nom, " +
-			" c.concepto, r.numero, f.nombre, r.moneda, r.importe, r.fecha, aap.id_programa, aap.cod_alumno, " +
+			" c.concepto, r.numero, f.nombre, r.moneda, r.importe, r.fecha, ap.id_programa, ap.cod_alumno, " +
 			" r.observacion from recaudaciones r, alumno a, facultad f, concepto c, alumno_programa ap, " +
 			" alumno_alumno_programa aap where to_tsquery( ? ) " +
 			" @@ to_tsvector(ap.cod_alumno) " +
 			" and (ap.id_programa = aap.id_programa) and (ap.cod_alumno = aap.cod_alumno) and " +
 			" (aap.id_alum = a.id_alum) and (a.id_alum = r.id_alum) and (a.id_facultad = f.id_facultad) " +
-			" and (r.id_concepto = c.id_concepto) and (c.id_clase_pagos = 2) order by c.concepto, r.fecha";
+			" and (r.id_concepto = c.id_concepto) and (c.id_clase_pagos = 2) " +
+			" and (TO_CHAR(r.fecha,'YY') >= substr(ap.cod_alumno, 1, 2)) " +
+			" order by c.concepto, r.fecha";
 		
 		//String sql = "select r.id_rec, r.id_alum, ap.nom_alumno || ' ' || ap.ape_paterno || ' ' || ap.ape_materno as ape_nom, c.concepto, r.numero, f.nombre, r.moneda, r.importe, r.fecha, aap.id_programa, aap.cod_alumno from recaudaciones r, alumno a, facultad f, concepto c, alumno_programa ap, alumno_alumno_programa aap where (ap.cod_alumno = '14207097' ) and (ap.id_programa = aap.id_programa) and (ap.cod_alumno = aap.cod_alumno) and (aap.id_alum = a.id_alum) and (a.id_alum = r.id_alum) and (a.id_facultad = f.id_facultad) and (r.id_concepto = c.id_concepto) and (c.id_clase_pagos = 2) order by c.concepto, r.fecha";
 		// RowMapper<Recaudaciones> rowMapper = new
