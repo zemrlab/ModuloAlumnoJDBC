@@ -45,7 +45,14 @@ public class AlumnoDAOImpl implements IAlumnoDAO {
 	
 	@Override
 	public List<Alumno> getAlumnoIdByNombresApellidosRestringido(String nombresApellidos) {
-		String sql = "select a.id_alum, a.id_facultad, a.ape_nom, a.codigo, a.dni from alumno a, recaudaciones r, concepto c WHERE to_tsquery( translate( ? ,'áéíóúÁÉÍÓÚäëïöüÄËÏÖÜ','aeiouAEIOUaeiouAEIOU') ) @@ to_tsvector(coalesce(translate( a.ape_nom ,'áéíóúÁÉÍÓÚäëïöüÄËÏÖÜ','aeiouAEIOUaeiouAEIOU'))) and r.id_alum = a.id_alum and r.id_concepto = c.id_concepto and c.id_clase_pagos = 2 group by a.id_alum";
+		String sql = "select a.id_alum, a.id_facultad, a.ape_nom, a.codigo, " +
+			" a.dni from alumno a, recaudaciones r, concepto c " +
+			" WHERE to_tsquery( translate( ? ,'áéíóúÁÉÍÓÚäëïöüÄËÏÖÜ','aeiouAEIOUaeiouAEIOU') ) " +
+			" @@ to_tsvector(coalesce(translate( a.ape_nom ,'áéíóúÁÉÍÓÚäëïöüÄËÏÖÜ','aeiouAEIOUaeiouAEIOU'))) " +
+			" and r.id_alum = a.id_alum " +
+			" and r.id_concepto = c.id_concepto " +
+			" and c.id_clase_pagos = 2 " +
+			" group by a.id_alum";
 		//String sql = "select a.id_alum, a.id_facultad, a.ape_nom, a.codigo, a.dni from alumno a, recaudaciones r, concepto c WHERE to_tsquery( translate( ? ,'áéíóúÁÉÍÓÚäëïöüÄËÏÖÜ','aeiouAEIOUaeiouAEIOU') ) @@ to_tsvector(coalesce(translate( a.ape_nom ,'áéíóúÁÉÍÓÚäëïöüÄËÏÖÜ','aeiouAEIOUaeiouAEIOU'))) and r.id_alum = a.id_alum and r.id_concepto = c.id_concepto and c.id_clase_pagos = 2 and a.id_alum != all (select id_alum from alumno_alumno_programa) group by a.id_alum";
 		// RowMapper<Concepto> rowMapper = new
 		// BeanPropertyRowMapper<Concepto>(Concepto.class);
